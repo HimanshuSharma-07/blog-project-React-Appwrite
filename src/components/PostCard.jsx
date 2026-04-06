@@ -27,9 +27,9 @@ function PostCard({ post }) {
         </div>
 
         {/* Content */}
-        <div className="p-5 space-y-3">
+        <div className="p-5 flex flex-col h-[180px]">
           {/* Meta: Author & Date */}
-          <div className="flex items-center text-[10px] font-bold uppercase tracking-wider text-gray-400 gap-2">
+          <div className="flex items-center text-[10px] font-bold uppercase tracking-wider text-gray-400 gap-2 mb-2">
             <span>{post.userName || "Anonymous"}</span>
             <span>•</span>
             <span>
@@ -44,17 +44,23 @@ function PostCard({ post }) {
           {/* Title */}
           <h2
             className="
-              text-lg font-bold text-gray-900
+              text-xl font-bold text-gray-900
               leading-snug
               line-clamp-2
+              mb-2
               group-hover:text-background-color
               transition-colors duration-200
             "
           >
             {post.title}
           </h2>
+
+          {/* Description Preview */}
+          <p className="text-gray-500 text-sm line-clamp-2 mb-auto leading-relaxed">
+            {post.content ? post.content.replace(/<[^>]+>/g, '') : "Read the full story..."}
+          </p>
           
-          <div className="flex items-center text-sm font-medium text-background-color opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          <div className="flex items-center text-sm font-semibold text-background-color opacity-0 group-hover:opacity-100 transition-opacity duration-300 mt-4">
             Read Story →
           </div>
         </div>
