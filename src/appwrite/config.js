@@ -8,10 +8,10 @@ export class Services {
 
     constructor() {
         this.client
-            .setEndpoint(conf.apiwriteUrl)
-            .setProject(conf.apiwriteProjectId)
+            .setEndpoint(import.meta.env.VITE_APPWRITE_URL)
+            .setProject(import.meta.env.VITE_APPWRITE_PROJECT_ID)
         this.databases = new Databases(this.client)
-        this.storage = new Storage(this.client)
+        this.storage = new Storage(this.client) 
     }
 
     async createPost({ title, slug, content, featuredImage, status, userId, userName }) {
