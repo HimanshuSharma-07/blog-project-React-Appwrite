@@ -11,8 +11,9 @@
           {label && <label className='inline-block mb-1 pl-1 text-sm font-medium text-gray-700'>{label}</label>}
 
           {loading && (
-            <div className="absolute inset-0 top-6 flex items-center justify-center bg-gray-50 border border-gray-200 rounded-lg z-10 min-h-[500px]">
+            <div className="fixed inset-0 z-100 flex flex-col items-center justify-center bg-white/80 backdrop-blur-sm min-h-screen">
               <Loader />
+              <p className="mt-4 text-sm font-medium text-gray-500 animate-pulse">Loading...</p>
             </div>
           )}
 
@@ -22,7 +23,7 @@
           render={({field : {onChange}}) => (
               <Editor 
               onInit={() => setLoading(false)}
-              apiKey='lfn5fe750nl9rin3wcu9324c3xmm52q7r9fc3g8ros17x3jk'
+              apiKey='mbsz41ce9279yrmu8c1q6yxcf5obyogyxdaf74jec4pdpc05'
               initialValue={defaultValue}
               init={{
                   initialValue: defaultValue,
