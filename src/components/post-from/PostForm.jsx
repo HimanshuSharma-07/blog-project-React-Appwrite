@@ -15,43 +15,51 @@ export default function PostForm({ post }) {
         status: post?.status || "active",
       },
     });
+  
+  const [loading, setLoading] = React.useState(false);
 
   const navigate = useNavigate();
   const userData = useSelector((state) => state.auth.userData);
 
   const submit = async (data) => {
-    if (post) {
-      const file = data.image[0]
-        ? await appwriteService.uploadFile(data.image?.[0])
-        : null;
+    setLoading(true);
+    try {
+      if (post) {
+        const file = data.image[0]
+          ? await appwriteService.uploadFile(data.image?.[0])
+          : null;
 
-      if (file) {
-        appwriteService.deleteFile(post.featuredImage);
-      }
+        if (file) {
+          appwriteService.deleteFile(post.featuredImage);
+        }
 
-      const dbPost = await appwriteService.updatePost(post.$id, {
-        ...data,
-        featuredImage: file ? file.$id : undefined,
-      });
-
-      if (dbPost) {
-        navigate(`/post/${dbPost.$id}`);
-      }
-    } else {
-      const file = await appwriteService.uploadFile(data.image[0]);
-
-      if (file) {
-        const fileId = file.$id;
-        data.featuredImage = fileId;
-        const dbPost = await appwriteService.createPost({
+        const dbPost = await appwriteService.updatePost(post.$id, {
           ...data,
-          userId: userData.$id,
+          featuredImage: file ? file.$id : undefined,
         });
 
         if (dbPost) {
           navigate(`/post/${dbPost.$id}`);
         }
+      } else {
+        const file = await appwriteService.uploadFile(data.image[0]);
+
+        if (file) {
+          const fileId = file.$id;
+          data.featuredImage = fileId;
+          const dbPost = await appwriteService.createPost({
+            ...data,
+            userId: userData.$id,
+            userName: userData.name || "Anonymous",
+          });
+
+          if (dbPost) {
+            navigate(`/post/${dbPost.$id}`);
+          }
+        }
       }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -79,10 +87,10 @@ export default function PostForm({ post }) {
   return (
     <form
       onSubmit={handleSubmit(submit)}
-      className="flex flex-wrap bg-white border border-gray-300 p-4 md:p-6"
+      className="flex flex-wrap bg-white border border-gray-100 rounded-2xl shadow-sm p-4 sm:p-6 md:p-8"
     >
       {/* Left: Main Content */}
-      <div className="w-full md:w-2/3 md:pr-6">
+      <div className="w-full md:w-2/3 md:pr-8">
         <Input
           label="Title :"
           placeholder="Title"
@@ -102,7 +110,7 @@ export default function PostForm({ post }) {
           }}
         />
 
-        <div className="border border-gray-300 p-2 sm:p-4 rounded-2xl">
+        <div className="border border-gray-100 p-2 sm:p-4 rounded-xl shadow-sm">
           <RTE
             label="Content :"
             name="content"
@@ -113,7 +121,7 @@ export default function PostForm({ post }) {
       </div>
 
       {/* Right: Sidebar */}
-      <div className="w-full md:w-1/3 mt-6 md:mt-0 md:pl-6 border-t md:border-t-0 md:border-l border-gray-300">
+      <div className="w-full md:w-1/3 mt-8 md:mt-0 md:pl-8 border-t md:border-t-0 md:border-l border-gray-100 pt-8 md:pt-0">
         <div className="pt-6 md:pt-0 space-y-4">
           <Input
             className="
@@ -153,8 +161,9 @@ export default function PostForm({ post }) {
             type="submit"
             bgColor={post ? "bg-green-500" : undefined}
             className="w-full"
+            disabled={loading}
           >
-            {post ? "Update" : "Submit"}
+            {loading ? (post ? "Updating..." : "Submitting...") : (post ? "Update" : "Submit")}
           </Button>
         </div>
       </div>

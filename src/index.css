@@ -3,8 +3,29 @@
 
 
 @theme {
-    --color-background-color :#57d629;
-    --color-gray-color: #111111;
-    --color-gradation: # #13c2fd;
-    --color-card-bg: ##252525
+    --color-background-color: #16a34a;
+    --color-gray-color: #111827;
+    --color-gradation: #0ea5e9;
+    --color-card-bg: #ffffff;
+}
+
+@layer base {
+  body {
+    @apply bg-gray-50 text-gray-900 antialiased;
+    font-family: system-ui, -apple-system, sans-serif;
+  }
+  button {
+    @apply cursor-pointer;
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  @apply bg-transparent;
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-gray-200 rounded-full hover:bg-gray-300 transition-colors;
 }

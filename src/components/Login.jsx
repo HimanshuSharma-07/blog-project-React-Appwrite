@@ -11,24 +11,28 @@ function Login() {
     const dispatch = useDispatch()
     const {register, handleSubmit} = useForm()
     const [error, setError] = useState("")
+    const [loading, setLoading] = useState(false)
 
     const login = async(data) => {
         setError("")
+        setLoading(true)
         try {
           await authService.logout();
             const session = await authService.login(data)
             if (session) {
                 const userData = await authService.getCurrentUser()
-                if(userData) dispatch(authLogin(userData));
+                if(userData) dispatch(authLogin({userData}));
                 navigate("/")
             }
         } catch (error) {
             setError(error.message)
+        } finally {
+            setLoading(false)
         }
     }
 
   return (
-    <div className="flex items-center justify-center w-full min-h-screen bg-gray-50 px-4 rounde">
+    <div className="flex items-center justify-center w-full min-h-screen bg-gray-50 px-4 rounded-3xl">
       
       <div className="w-full max-w-sm bg-white border border-gray-300 px-6 py-8 rounded-3xl">
 
@@ -81,8 +85,9 @@ function Login() {
             <Button
               type="submit"
               className="w-full h-10 bg-background-color text-white"
+              disabled={loading}
             >
-              Sign in
+              {loading ? "Signing in..." : "Sign in"}
             </Button>
 
           </div>

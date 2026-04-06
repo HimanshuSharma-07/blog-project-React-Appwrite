@@ -28,9 +28,7 @@ export class Services {
                     userId,
                     userName
                 },
-                Permission.read(Role.any()),
-                Permission.update(Role.user(userId)),
-                Permission.delete(Role.user(userId)),
+                
             )
 
         }

@@ -9,20 +9,24 @@ import {useForm} from 'react-hook-form'
 function Signup() {
     const navigate = useNavigate()
     const [error, setError] = useState("")
+    const [loading, setLoading] = useState(false)
     const dispatch = useDispatch()
     const {register, handleSubmit} = useForm()
 
     const create = async(data) => {
         setError("")
+        setLoading(true)
         try {
-            const userData = await authService.createAccount(data)
-            if (userData) {
+            const user = await authService.createAccount(data)
+            if (user) {
                 const userData = await authService.getCurrentUser()
-                if(userData) dispatch(login(userData));
+                if(userData) dispatch(login({userData}));
                 navigate("/")
             }
         } catch (error) {
             setError(error.message)
+        } finally {
+            setLoading(false)
         }
     }
 
@@ -81,8 +85,9 @@ function Signup() {
             <Button
               type="submit"
               className="w-full h-10 bg-background-color text-white"
+              disabled={loading}
             >
-              Create Account
+              {loading ? "Creating Account..." : "Create Account"}
             </Button>
 
           </div>

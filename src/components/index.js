@@ -12,6 +12,8 @@ import Login from "./Login"
 import PostCard from "./PostCard"
 import PostForm from "../components/post-from/PostForm"
 import AuthLayout from "../components/AuthLayout"
+import Loader from "./Loader"
+import SkeletonCard from "./SkeletonCard"
 
 
 
@@ -30,5 +32,7 @@ export {
     PostCard,
     PostForm,
     AuthLayout,
+    Loader,
+    SkeletonCard,
  
 }

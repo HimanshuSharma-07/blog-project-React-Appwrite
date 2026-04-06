@@ -13,7 +13,7 @@ function Button({
       type={type}
       className={`px-4 py-2 text-sm font-medium border cursor-pointer border-gray-300 
                   ${bgColor} ${textColor} ${className}
-                  hover:opacity-90 rounded-full`}
+                  hover:opacity-90 active:scale-95 transition-all duration-200 rounded-full`}
       {...props}
     >
         {children}

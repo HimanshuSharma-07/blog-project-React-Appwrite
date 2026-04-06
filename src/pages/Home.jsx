@@ -1,19 +1,20 @@
-import React, { useEffect, useState } from "react";
-import { Container, Button } from "../components";
+import { Container, Button, SkeletonCard } from "../components";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import appwriteService from "../appwrite/config";
 import PostCard from "../components/PostCard";
+import { useState, useEffect } from "react";
 
 function Home() {
   const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
   const authStatus = useSelector((state) => state.auth.status);
   const navigate = useNavigate();
 
   useEffect(() => {
     appwriteService.getPosts([]).then((res) => {
       if (res) setPosts(res.documents);
-    });
+    }).finally(() => setLoading(false));
   }, []);
 
   return (
@@ -62,7 +63,13 @@ function Home() {
             </Link>
           </div>
 
-          {posts.length === 0 ? (
+          {loading ? (
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {[1, 2, 3].map((i) => (
+                <SkeletonCard key={i} />
+              ))}
+            </div>
+          ) : posts.length === 0 ? (
             <p className="text-gray-500 text-sm">No posts yet.</p>
           ) : (
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
