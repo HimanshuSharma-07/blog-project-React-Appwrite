@@ -70,7 +70,7 @@ function Header() {
       {open && (
         <div
           className="
-            absolute top-[72px] right-4
+            absolute top-18 right-4
             w-48
             bg-white
             border border-gray-100
