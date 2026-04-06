@@ -107,7 +107,7 @@ function Header() {
 
           {authStatus && (
             <div className="mt-1 pt-1 border-t border-gray-100 w-full flex">
-              <div className="w-full" onClick={() => setOpen(false)}>
+              <div className="w-full">
                 <LogoutBtn />
               </div>
             </div>
