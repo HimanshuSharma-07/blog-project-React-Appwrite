@@ -57,7 +57,7 @@ function PostCard({ post }) {
 
           {/* Description Preview */}
           <p className="text-gray-500 text-sm line-clamp-2 mb-auto leading-relaxed">
-            {post.content ? post.content.replace(/<[^>]+>/g, '') : "Read the full story..."}
+            {post.content ? post.content.replace(/<[^>]+>/g, '').replace(/&nbsp;/g, ' ') : "Read the full story..."}
           </p>
           
           <div className="flex items-center text-sm font-semibold text-background-color opacity-0 group-hover:opacity-100 transition-opacity duration-300 mt-4">
