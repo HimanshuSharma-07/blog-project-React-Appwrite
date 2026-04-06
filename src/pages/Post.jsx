@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import appwriteService from "../appwrite/config";
 import { Button, Container, Loader } from "../components";
@@ -9,6 +10,8 @@ import { CircleArrowLeft, Pencil, Trash2 } from "lucide-react";
 export default function Post() {
   const [post, setPost] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [deleteLoading, setDeleteLoading] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const { slug } = useParams();
   const navigate = useNavigate();
 
@@ -44,11 +47,17 @@ export default function Post() {
     post.userId === userData.$id;
 
   // Delete post
-  const deletePost = async () => {
-    const status = await appwriteService.deletePost(post.$id);
-    if (status) {
-      await appwriteService.deleteFile(post.featuredImage);
-      navigate("/");
+  const executeDelete = async () => {
+    setDeleteLoading(true);
+    try {
+      const status = await appwriteService.deletePost(post.$id);
+      if (status) {
+        await appwriteService.deleteFile(post.featuredImage);
+        navigate("/");
+      }
+    } finally {
+      setDeleteLoading(false);
+      setShowDeleteConfirm(false);
     }
   };
 
@@ -108,7 +117,7 @@ export default function Post() {
                   </Button>
                 </Link>
                 <Button
-                  onClick={deletePost}
+                  onClick={() => setShowDeleteConfirm(true)}
                   className="flex items-center gap-1.5 px-4 py-2 text-sm bg-red-500 text-white border-none shadow-sm shadow-black/10"
                 >
                   <Trash2 size={14} />
@@ -124,6 +133,36 @@ export default function Post() {
           </div>
         </div>
       </Container>
+
+
+      {/* Delete Confirmation Modal via Portal */}
+      {showDeleteConfirm && createPortal(
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900/40 backdrop-blur-sm">
+          <div className="bg-white rounded-2xl p-6 md:p-8 max-w-sm w-full mx-4 shadow-2xl animate-in fade-in zoom-in duration-200">
+            <h3 className="text-xl font-bold text-gray-900 mb-2">Delete Post</h3>
+            <p className="text-gray-600 text-sm mb-6">
+              Are you sure you want to permanently delete this post? This action cannot be undone and will remove the post and its image from the blog.
+            </p>
+            <div className="flex flex-col-reverse sm:flex-row justify-end gap-3">
+              <button
+                onClick={() => setShowDeleteConfirm(false)}
+                disabled={deleteLoading}
+                className="px-5 py-2.5 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-xl transition-colors disabled:opacity-50"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={executeDelete}
+                disabled={deleteLoading}
+                className="px-5 py-2.5 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-xl transition-colors shadow-sm shadow-red-600/20 disabled:opacity-50"
+              >
+                {deleteLoading ? "Deleting..." : "Yes, Delete"}
+              </button>
+            </div>
+          </div>
+        </div>,
+        document.body
+      )}
     </div>
   );
 }

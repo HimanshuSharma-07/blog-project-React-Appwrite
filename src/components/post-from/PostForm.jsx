@@ -11,7 +11,7 @@ export default function PostForm({ post }) {
     useForm({
       defaultValues: {
         title: post?.title || "",
-        slug: post?.slug || "",
+        slug: post?.$id || "",
         content: post?.content || "",
         status: post?.status || "active",
       },
@@ -66,7 +66,7 @@ export default function PostForm({ post }) {
           const dbPost = await appwriteService.createPost({
             ...data,
             userId: userData.$id,
-            // Removed userName here to fix Appwrite schema validation crash
+            userName: userData.name || "Anonymous",
           });
 
           if (dbPost) {
@@ -99,7 +99,7 @@ export default function PostForm({ post }) {
 
   useEffect(() => {
     const subscription = watch((value, { name }) => {
-      if (name === "title") {
+      if (name === "title" && !post) {
         setValue("slug", slugTransform(value.title), { shouldValidate: true });
       }
     });
@@ -125,12 +125,19 @@ export default function PostForm({ post }) {
         <Input
           label="Slug :"
           placeholder="Slug"
-          className="mb-4 ml-2 rounded px-2 py-1 cursor-pointer border hover:border-background-color"
+          className={`mb-4 ml-2 rounded px-2 py-1 border ${
+            post 
+              ? "bg-gray-100 text-gray-500 cursor-not-allowed select-none" 
+              : "cursor-pointer hover:border-background-color"
+          }`}
+          readOnly={!!post}
           {...register("slug", { required: true })}
           onInput={(e) => {
-            setValue("slug", slugTransform(e.currentTarget.value), {
-              shouldValidate: true,
-            });
+            if (!post) {
+              setValue("slug", slugTransform(e.currentTarget.value), {
+                shouldValidate: true,
+              });
+            }
           }}
         />
 
