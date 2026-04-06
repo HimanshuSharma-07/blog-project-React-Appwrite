@@ -1,4 +1,5 @@
 import React, { useEffect, useCallback } from "react";
+import { createPortal } from "react-dom";
 import { set, useForm } from "react-hook-form";
 import { Button, Input, RTE, Select } from "..";
 import appwriteService from "../../appwrite/config";
@@ -17,12 +18,27 @@ export default function PostForm({ post }) {
     });
   
   const [loading, setLoading] = React.useState(false);
+  const [error, setError] = React.useState("");
+
+  // Confirmation Modal State
+  const [showConfirm, setShowConfirm] = React.useState(false);
+  const [pendingData, setPendingData] = React.useState(null);
 
   const navigate = useNavigate();
   const userData = useSelector((state) => state.auth.userData);
 
-  const submit = async (data) => {
+  // Intercept the react-hook-form submission to show popup
+  const handleInterceptSubmit = (data) => {
+    setPendingData(data);
+    setShowConfirm(true);
+  };
+
+  const executeSubmit = async () => {
+    if (!pendingData) return;
+    const data = pendingData;
+    
     setLoading(true);
+    setError("");
     try {
       if (post) {
         const file = data.image[0]
@@ -50,16 +66,23 @@ export default function PostForm({ post }) {
           const dbPost = await appwriteService.createPost({
             ...data,
             userId: userData.$id,
-            userName: userData.name || "Anonymous",
+            // Removed userName here to fix Appwrite schema validation crash
           });
 
           if (dbPost) {
             navigate(`/post/${dbPost.$id}`);
+          } else {
+            setError("Failed to create post. Please check your network or database schema.");
           }
+        } else {
+          setError("Failed to upload image.");
         }
       }
+    } catch (err) {
+      setError(err.message || "An unexpected error occurred.");
     } finally {
       setLoading(false);
+      setShowConfirm(false);
     }
   };
 
@@ -85,8 +108,9 @@ export default function PostForm({ post }) {
   }, [watch, slugTransform, setValue, post]);
 
   return (
+    <>
     <form
-      onSubmit={handleSubmit(submit)}
+      onSubmit={handleSubmit(handleInterceptSubmit)}
       className="flex flex-wrap bg-white border border-gray-100 rounded-2xl shadow-sm p-4 sm:p-6 md:p-8"
     >
       {/* Left: Main Content */}
@@ -168,5 +192,51 @@ export default function PostForm({ post }) {
         </div>
       </div>
     </form>
+
+      {/* Confirmation Modal via Portal */}
+      {showConfirm && createPortal(
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900/40 backdrop-blur-sm">
+          <div className="bg-white rounded-2xl p-6 md:p-8 max-w-sm w-full mx-4 shadow-2xl animate-in fade-in zoom-in duration-200">
+            <h3 className="text-xl font-bold text-gray-900 mb-2">
+              {post ? "Update Post" : "Publish Post"}
+            </h3>
+            <p className="text-gray-600 text-sm mb-6">
+              {post 
+                ? "Are you sure you want to update this post with the new details?"
+                : "Are you sure you want to publish this new post to the blog?"}
+            </p>
+
+            {error && (
+              <div className="mb-4 p-3 bg-red-50 text-red-600 text-sm rounded-lg border border-red-100">
+                {error}
+              </div>
+            )}
+
+            <div className="flex flex-col-reverse sm:flex-row justify-end gap-3">
+              <button
+                type="button"
+                onClick={() => {
+                  setShowConfirm(false);
+                  setError("");
+                }}
+                disabled={loading}
+                className="px-5 py-2.5 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-xl transition-colors disabled:opacity-50"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={executeSubmit}
+                disabled={loading}
+                className="px-5 py-2.5 text-sm font-medium text-white bg-green-600 hover:bg-green-700 rounded-xl transition-colors shadow-sm shadow-green-600/20 disabled:opacity-50"
+              >
+                {loading ? "Processing..." : "Yes, proceed"}
+              </button>
+            </div>
+          </div>
+        </div>,
+        document.body
+      )}
+    </>
   );
 }
