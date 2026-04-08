@@ -18,7 +18,7 @@ function PostCard({ post }) {
         "
       >
         {/* Image */}
-        <div className="w-full aspect-[16/10] overflow-hidden">
+        <div className="w-full aspect-16/10 overflow-hidden">
           <img
             src={appwriteService.getFileView(post.featuredImage)}
             alt={post.title}
@@ -27,7 +27,7 @@ function PostCard({ post }) {
         </div>
 
         {/* Content */}
-        <div className="p-5 flex flex-col h-[180px]">
+        <div className="p-5 flex flex-col h-45">
           {/* Meta: Author & Date */}
           <div className="flex items-center text-[10px] font-bold uppercase tracking-wider text-gray-400 gap-2 mb-2">
             <span>{post.userName || "Anonymous"}</span>
@@ -52,7 +52,7 @@ function PostCard({ post }) {
               transition-colors duration-200
             "
           >
-            {post.title}
+            {post.title.replace(/&nbsp;/g, ' ')}
           </h2>
 
           {/* Description Preview */}

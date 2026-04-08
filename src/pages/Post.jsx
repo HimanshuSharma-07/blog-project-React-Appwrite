@@ -85,7 +85,7 @@ export default function Post() {
           {/* Title */}
           <div className="mb-6 flex flex-col md:flex-row md:justify-between items-start md:items-center gap-4">
             <h1 className="text-3xl md:text-4xl font-bold text-gray-900 leading-tight">
-              {post.title}
+              {post.title.replace(/&nbsp;/g, ' ')}
             </h1>
             <div className="flex items-center text-xs font-bold uppercase tracking-wider text-gray-400 gap-2 shrink-0">
               <span>{post.userName || "Anonymous"}</span>
@@ -129,7 +129,7 @@ export default function Post() {
 
           {/* Content */}
           <div className="bg-white px-6 md:px-10 py-8 rounded-xl border border-gray-200 text-gray-800">
-            {parse(post.content)}
+            {parse(post.content.replace(/&nbsp;/g, ' '))}
           </div>
         </div>
       </Container>
