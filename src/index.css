@@ -3,16 +3,16 @@
 
 
 @theme {
-    --color-background-color: #16a34a;
+    --color-background-color: #0f172a;
     --color-gray-color: #111827;
-    --color-gradation: #0ea5e9;
+    --color-gradation: #334155;
     --color-card-bg: #ffffff;
 }
 
 @layer base {
   body {
     @apply bg-gray-50 text-gray-900 antialiased;
-    font-family: system-ui, -apple-system, sans-serif;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
   }
   button {
     @apply cursor-pointer;

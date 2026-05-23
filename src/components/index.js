@@ -14,6 +14,8 @@ import PostForm from "../components/post-from/PostForm"
 import AuthLayout from "../components/AuthLayout"
 import Loader from "./Loader"
 import SkeletonCard from "./SkeletonCard"
+import SkeletonPost from "./SkeletonPost"
+import SkeletonForm from "./SkeletonForm"
 
 
 
@@ -34,5 +36,7 @@ export {
     AuthLayout,
     Loader,
     SkeletonCard,
+    SkeletonPost,
+    SkeletonForm,
  
 }

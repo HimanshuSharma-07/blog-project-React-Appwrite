@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Container, Logo, LogoutBtn } from '../index'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, NavLink, useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { Menu, X } from "lucide-react"
 
@@ -35,17 +35,18 @@ function Header() {
         {navItems.map(item =>
           item.active && (
             <li key={item.name}>
-              <button
-                onClick={() => navigate(item.slug)}
-                className="
-                  px-4 py-2 
-                  text-sm font-medium text-gray-600
-                  hover:bg-gray-100 hover:text-gray-900
-                  rounded-lg transition-all duration-200
-                "
+              <NavLink
+                to={item.slug}
+                className={({ isActive }) => `
+                  px-4 py-2 text-sm font-medium rounded-lg transition-colors duration-200
+                  ${isActive 
+                    ? "text-gray-900 bg-gray-100/50" 
+                    : "text-gray-500 hover:text-gray-900 "
+                  }
+                `}
               >
                 {item.name}
-              </button>
+              </NavLink>
             </li>
           )
         )}
@@ -80,35 +81,34 @@ function Header() {
             z-50
             overflow-hidden
             flex flex-col
-            p-1
+            p-1.5
+            animate-in fade-in slide-in-from-top-4 duration-200
           "
         >
           {navItems.map(
             (item) =>
               item.active && (
-                <button
+                <NavLink
                   key={item.name}
-                  onClick={() => {
-                    navigate(item.slug);
-                    setOpen(false);
-                  }}
-                  className="
-                    w-full px-4 py-2.5
-                    text-sm font-medium text-gray-600
-                    text-left
-                    hover:bg-gray-50 hover:text-gray-900
-                    rounded-lg transition-colors
-                  "
+                  to={item.slug}
+                  onClick={() => setOpen(false)}
+                  className={({ isActive }) => `
+                    w-full px-4 py-2.5 text-sm font-medium text-left rounded-lg transition-colors
+                    ${isActive
+                      ? "text-gray-900 bg-gray-100"
+                      : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                    }
+                  `}
                 >
                   {item.name}
-                </button>
+                </NavLink>
               )
           )}
 
           {authStatus && (
             <div className="mt-1 pt-1 border-t border-gray-100 w-full flex">
               <div className="w-full">
-                <LogoutBtn />
+                <LogoutBtn className="w-full text-left" />
               </div>
             </div>
           )}

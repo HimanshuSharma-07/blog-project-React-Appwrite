@@ -41,7 +41,9 @@ function Home() {
             {authStatus && (
               <Button
                 onClick={() => navigate("/add-post")}
-                className="px-6 py-2 bg-gray-900 text-gray-800 border border-gray-00 hover:bg-gray-900/100"
+                bgColor="bg-white"
+                textColor="text-gray-900"
+                className="px-6 py-2 border border-gray-200 hover:bg-gray-50"
               >
                 Write a Post
               </Button>
@@ -57,7 +59,7 @@ function Home() {
             </h2>
             <Link
               to="/all-posts"
-              className="text-sm font-medium text-background-color hover:underline"
+              className="text-sm font-medium text-gray-900 hover:underline"
             >
               View all →
             </Link>

@@ -43,7 +43,7 @@ function AllPosts() {
               placeholder="Search by title or content..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="block w-full pl-10 pr-3 py-2 border border-gray-200 rounded-xl leading-5 bg-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-background-color/50 focus:border-background-color transition-colors sm:text-sm"
+              className="block w-full pl-10 pr-3 py-2.5 border border-gray-200 rounded-xl leading-5 bg-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-100 focus:border-gray-400 transition-colors sm:text-sm"
             />
           </div>
         </div>

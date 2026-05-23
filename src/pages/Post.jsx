@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import appwriteService from "../appwrite/config";
-import { Button, Container, Loader } from "../components";
+import { Button, Container, SkeletonPost } from "../components";
 import parse from "html-react-parser";
 import { useSelector } from "react-redux";
 import { CircleArrowLeft, Pencil, Trash2 } from "lucide-react";
@@ -61,11 +61,7 @@ export default function Post() {
     }
   };
 
-  if (loading) return (
-    <div className="py-20">
-      <Loader />
-    </div>
-  );
+  if (loading) return <SkeletonPost />;
 
   if (!post) return null;
 

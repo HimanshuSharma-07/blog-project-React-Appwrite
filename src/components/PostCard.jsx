@@ -5,31 +5,29 @@ import { Link } from "react-router-dom";
 function PostCard({ post }) {
   return (
     <Link to={`/post/${post.$id}`} className="group block">
-      <div
+        <div
         className="
           w-full bg-white
           rounded-2xl
           overflow-hidden
           border border-gray-100
-          transition-all duration-300
-          group-hover:border-background-color/20
-          group-hover:shadow-xl group-hover:shadow-gray-200/50
-          group-hover:-translate-y-1
+          transition-colors duration-300
+          hover:border-gray-300
         "
       >
         {/* Image */}
-        <div className="w-full aspect-16/10 overflow-hidden">
+        <div className="w-full aspect-16/10 overflow-hidden bg-gray-50">
           <img
             src={appwriteService.getFileView(post.featuredImage)}
             alt={post.title}
-            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
           />
         </div>
 
         {/* Content */}
         <div className="p-5 flex flex-col h-45">
           {/* Meta: Author & Date */}
-          <div className="flex items-center text-[10px] font-bold uppercase tracking-wider text-gray-400 gap-2 mb-2">
+          <div className="flex items-center text-[10px] font-bold uppercase tracking-wider text-gray-500 gap-2 mb-2">
             <span>{post.userName || "Anonymous"}</span>
             <span>•</span>
             <span>
@@ -48,7 +46,7 @@ function PostCard({ post }) {
               leading-snug
               line-clamp-2
               mb-2
-              group-hover:text-background-color
+              group-hover:text-gray-600
               transition-colors duration-200
             "
           >
@@ -60,7 +58,7 @@ function PostCard({ post }) {
             {post.content ? post.content.replace(/<[^>]+>/g, '').replace(/&nbsp;/g, ' ') : "Read the full story..."}
           </p>
           
-          <div className="flex items-center text-sm font-semibold text-background-color opacity-0 group-hover:opacity-100 transition-opacity duration-300 mt-4">
+          <div className="flex items-center text-sm font-semibold text-gray-900 mt-4 group-hover:text-gray-500 transition-colors duration-200">
             Read Story →
           </div>
         </div>

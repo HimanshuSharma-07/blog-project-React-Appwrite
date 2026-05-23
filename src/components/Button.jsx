@@ -11,9 +11,9 @@ function Button({
   return (
     <button
       type={type}
-      className={`px-5 py-2.5 text-sm font-medium border cursor-pointer border-gray-300 
+      className={`px-5 py-2 text-sm font-medium border border-transparent cursor-pointer
                   ${bgColor} ${textColor} ${className}
-                  hover:opacity-90 active:scale-95 hover:shadow-md transition-all duration-200 rounded-full`}
+                  hover:opacity-90 active:opacity-100 transition-opacity duration-200 rounded-lg`}
       {...props}
     >
         {children}

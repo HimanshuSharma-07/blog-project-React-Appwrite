@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import {Container, PostForm, Loader} from '../components'
+import {Container, PostForm, SkeletonForm} from '../components'
 import appwriteService from "../appwrite/config";
 import { useNavigate,  useParams } from 'react-router-dom';
 
@@ -22,8 +22,10 @@ function EditPost() {
     }, [slug, navigate])
 
   if (loading) return (
-    <div className="py-20 flex justify-center">
-      <Loader />
+    <div className='py-8'>
+        <Container>
+            <SkeletonForm />
+        </Container>
     </div>
   );
 
